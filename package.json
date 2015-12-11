@@ -1,0 +1,65 @@
+{
+  "name": "cordova-base64-to-gallery",
+  "version": "1.0.0",
+  "description": "This plugin allows you to save base64 data as a png image into the device (iOS Photo Library, Android Gallery, WindowsPhone 8 Photo Album).",
+  "license": "MIT",
+  "scripts":
+  {
+    "lint": "eslint www/ase64ToGallery.js",
+    "test": "npm run lint",
+    "prepublish": "npm test"
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "git+https://github.com/Nexxa/base64ToGallery.git"
+  },
+  "bugs":
+  {
+    "url": "https://github.com/Nexxa/base64ToGallery/issues"
+  },
+  "engines": [
+    {
+      "cordova": ">=3.0.0"
+    },
+    {
+      "node": ">=0.12 <4.0"
+    }
+  ],
+  "cordova":
+  {
+    "id": "it.nexxa.base64ToGallery",
+    "platforms": [
+      "ios",
+      "android",
+      "wp8"
+    ]
+  },
+  "keywords": [
+    "image",
+    "base64",
+    "save",
+    "photo library",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android",
+    "cordova-wp8"
+  ],
+  "author":
+  {
+    "name": "StefanoMagrassi",
+    "email": "stefano.magrassi@gmail.com",
+    "url": "http://thinkwritedone.com"
+  },
+  "contributors": [
+    {
+      "name": "Simba Zhang",
+      "email": "solderzzc@gmail.com",
+      "url": "http://www.tiegushi.com"
+    }
+  ],
+  "devDependencies":
+  {
+    "eslint": "^1.10.3"
+  }
+}
