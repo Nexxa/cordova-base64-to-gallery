@@ -1,11 +1,11 @@
 {
   "name": "cordova-base64-to-gallery",
-  "version": "1.0.0",
-  "description": "This plugin allows you to save base64 data as a png image into the device (iOS Photo Library, Android Gallery, WindowsPhone 8 Photo Album).",
+  "version": "1.0.1",
+  "description": "Cordova plugin to save base64 data as a png image into the device",
   "license": "MIT",
   "scripts":
   {
-    "lint": "eslint www/ase64ToGallery.js",
+    "lint": "eslint www/base64ToGallery.js",
     "test": "npm run lint",
     "prepublish": "npm test"
   },
@@ -23,7 +23,7 @@
       "cordova": ">=3.0.0"
     },
     {
-      "node": ">=0.12 <4.0"
+      "node": ">=0.10"
     }
   ],
   "cordova":
