@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts":
   {
+    "update": "node ./scripts/update_version",
     "lint": "eslint www/base64ToGallery.js",
     "test": "npm run lint",
     "prepublish": "npm test"
@@ -60,6 +61,7 @@
   ],
   "devDependencies":
   {
-    "eslint": "^1.10.3"
+    "eslint": "1.10.3",
+    "libxmljs": "0.16.1"
   }
 }
