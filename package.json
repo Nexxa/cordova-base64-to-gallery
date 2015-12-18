@@ -12,11 +12,11 @@
   "repository":
   {
     "type": "git",
-    "url": "git+https://github.com/Nexxa/base64ToGallery.git"
+    "url": "git+https://github.com/Nexxa/cordova-base64-to-gallery.git"
   },
   "bugs":
   {
-    "url": "https://github.com/Nexxa/base64ToGallery/issues"
+    "url": "https://github.com/Nexxa/cordova-base64-to-gallery/issues"
   },
   "engines": [
     {
@@ -28,7 +28,7 @@
   ],
   "cordova":
   {
-    "id": "it.nexxa.base64ToGallery",
+    "id": "cordova-base64-to-gallery",
     "platforms": [
       "ios",
       "android",
