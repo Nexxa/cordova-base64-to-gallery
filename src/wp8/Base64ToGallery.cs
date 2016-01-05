@@ -37,7 +37,7 @@ public class Base64ToGallery : BaseCommand
 
                 if (picture.Name.Contains(fileName))
                 {
-                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK, "Image saved: " + picture.Name));
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK));
                 }
                 else
                 {

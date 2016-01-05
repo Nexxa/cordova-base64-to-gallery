@@ -7,7 +7,6 @@
 //	MIT Licensed
 //
 
-
 #import <Cordova/CDVPlugin.h>
 
 @interface Base64ToGallery : CDVPlugin
