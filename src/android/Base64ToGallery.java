@@ -53,9 +53,7 @@ public class Base64ToGallery extends CordovaPlugin {
 				filePrefix = DEFAULT_FILE_PREFIX;
 			}
 
-			// Create the bitmap from the base64 string
-			Log.d("Base64ToGallery", base64);
-
+      // Create the bitmap from the base64 string
 			byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
 			Bitmap bmp           = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
@@ -98,9 +96,6 @@ public class Base64ToGallery extends CordovaPlugin {
 															+ c.get(Calendar.HOUR_OF_DAY)
 															+ c.get(Calendar.MINUTE)
 															+ c.get(Calendar.SECOND);
-
-
-			Log.i("Base64ToGallery", "Android version " + deviceVersion);
 
 			int check = deviceVersion.compareTo("2.3.3");
 
