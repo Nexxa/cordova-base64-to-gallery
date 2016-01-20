@@ -1,6 +1,6 @@
 {
   "name": "cordova-base64-to-gallery",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Cordova plugin to save base64 data as a png image into the device",
   "license": "MIT",
   "scripts": {
