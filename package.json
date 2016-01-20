@@ -57,6 +57,6 @@
   ],
   "devDependencies": {
     "eslint": "1.10.3",
-    "libxmljs": "0.16.1"
+    "nodemsg": "1.0.0"
   }
 }
