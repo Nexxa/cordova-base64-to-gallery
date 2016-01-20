@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns:android="http://schemas.android.com/apk/res/android" xmlns="http://www.phonegap.com/ns/plugins/1.0" id="cordova-base64-to-gallery" version="2.0.1">
 
+  <engines>
+    <engine name="cordova-ios" version="<3.8.0" />
+  </engines>
+
   <name>base64ToGallery</name>
 
   <description>This plugin allows you to save base64 data as a png image into the device (iOS Photo Library, Android Gallery, WindowsPhone 8 Photo Album).</description>
@@ -17,6 +21,8 @@
 
   <!-- ios -->
   <platform name="ios">
+    <source-file compiler-flags="-fno-objc-arc" src="src/ios/Base64ToGallery.m"/>
+
     <config-file parent="/*" target="config.xml">
       <feature name="Base64ToGallery">
         <param name="ios-package" value="Base64ToGallery"/>
@@ -25,12 +31,11 @@
     </config-file>
 
     <header-file src="src/ios/Base64ToGallery.h"/>
-
-    <source-file compiler-flags="-fno-objc-arc" src="src/ios/Base64ToGallery.m"/>
   </platform>
 
   <!-- android -->
   <platform name="android">
+    <source-file src="src/android/Base64ToGallery.java" target-dir="src/it/nexxa/Base64ToGallery"/>
 
     <config-file parent="/*" target="AndroidManifest.xml">
       <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -41,13 +46,12 @@
         <param name="android-package" value="it.nexxa.base64ToGallery.Base64ToGallery"/>
       </feature>
     </config-file>
-
-    <source-file src="src/android/Base64ToGallery.java" target-dir="src/it/nexxa/Base64ToGallery"/>
-
   </platform>
 
   <!-- wp8 -->
   <platform name="wp8">
+    <source-file src="src/wp8/Base64ToGallery.cs"/>
+
     <config-file parent="/*" target="config.xml">
       <feature name="Base64ToGallery">
         <param name="wp-package" value="Base64ToGallery"/>
@@ -58,7 +62,5 @@
     <config-file parent="/Deployment/App/Capabilities" target="Properties/WMAppManifest.xml">
       <Capability Name="ID_CAP_MEDIALIB_PHOTO"/>
     </config-file>
-
-    <source-file src="src/wp8/Base64ToGallery.cs"/>
   </platform>
 </plugin>

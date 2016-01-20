@@ -1,0 +1,5 @@
+# Make NPM module leaner
+
+/scripts
+.eslintrc
+.npmrc
