@@ -37,6 +37,7 @@
     "base64",
     "save",
     "photo library",
+    "gallery",
     "ecosystem:cordova",
     "cordova-ios",
     "cordova-android",
