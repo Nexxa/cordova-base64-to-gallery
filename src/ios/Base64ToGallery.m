@@ -17,10 +17,9 @@
     - (void)saveImageDataToLibrary:(CDVInvokedUrlCommand*)command
     {
         [self.commandDelegate runInBackground:^{
+            self.callbackId = command.callbackId;
+            self.result = nil;
 
-            //NSData* imageData = [NSData dataFromBase64String:[command.arguments objectAtIndex:0]];
-
-            CDVPluginResult* pluginResult = nil;
             NSString* base64String = [command.arguments objectAtIndex:0];
 
             if (base64String != nil && [base64String length] > 0) {
@@ -31,9 +30,9 @@
                 UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
 
             } else {
-                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+                self.result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
 
-                [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+                [self.commandDelegate sendPluginResult:self.result callbackId:self.callbackId];
             }
 
         }];
@@ -41,26 +40,19 @@
 
     - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
     {
-        CDVPluginResult* result = nil;
-
         // With errors
         if (error != NULL) {
             NSLog(@"ERROR: %@", error);
 
-            result = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsString:error.description];
-
-    		//[self.webView stringByEvaluatingJavaScriptFromString:[result toErrorCallbackString: command.callbackId]];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            self.result = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsString:error.description];
 
         // No errors
         } else {
 
-    		result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK];
-
-            //[self.webView stringByEvaluatingJavaScriptFromString:[result toSuccessCallbackString: command.callbackId]];
+    		self.result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK];
         }
 
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        [self.commandDelegate sendPluginResult:self.result callbackId:self.callbackId];
     }
 
 @end
