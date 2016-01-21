@@ -2,20 +2,17 @@
 //  Base64ToGallery.h
 //  Base64ToGallery PhoneGap/Cordova plugin
 //
-//  Created by Tommy-Carlos Williams on 29/03/12.
-//  Copyright (c) 2012 Tommy-Carlos Williams. All rights reserved.
+//	Copyright (c) 2016 StefanoMagrassi <stefano.magrassi@gmail.com>
+//
+//  Based on Tommy-Carlos Williams "Canvas2ImagePlugin.h"
+//
 //	MIT Licensed
 //
 
-#import <Cordova/CDVPlugin.h>
+#import <Cordova/CDV.h>
 
 @interface Base64ToGallery : CDVPlugin
-{
-	NSString* callbackId;
-}
 
-@property (nonatomic, copy) NSString* callbackId;
-
-- (void)saveImageDataToLibrary:(CDVInvokedUrlCommand*)command;
+	- (void)saveImageDataToLibrary:(CDVInvokedUrlCommand*)command;
 
 @end

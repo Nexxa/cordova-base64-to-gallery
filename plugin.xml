@@ -2,7 +2,7 @@
 <plugin xmlns:android="http://schemas.android.com/apk/res/android" xmlns="http://www.phonegap.com/ns/plugins/1.0" id="cordova-base64-to-gallery" version="2.0.2">
 
   <engines>
-    <engine name="cordova-ios" version="<3.8.0" />
+    <engine name="cordova-ios" version=">=3.8.0" />
   </engines>
 
   <name>base64ToGallery</name>

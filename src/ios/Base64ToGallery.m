@@ -2,8 +2,10 @@
 //  Base64ToGallery.m
 //  Base64ToGallery PhoneGap/Cordova plugin
 //
-//  Created by Tommy-Carlos Williams on 29/03/12.
-//  Copyright (c) 2012 Tommy-Carlos Williams. All rights reserved.
+//  Copyright (c) 2016 StefanoMagrassi <stefano.magrassi@gmail.com>
+//
+//  Based on Tommy-Carlos Williams "Canvas2ImagePlugin.m"
+//
 //	MIT Licensed
 //
 
@@ -11,49 +13,54 @@
 #import <Cordova/CDV.h>
 
 @implementation Base64ToGallery
-@synthesize callbackId;
 
-//-(CDVPlugin*) initWithWebView:(UIWebView*)theWebView
-//{
-//    self = (Base64ToGallery*)[super initWithWebView:theWebView];
-//    return self;
-//}
+    - (void)saveImageDataToLibrary:(CDVInvokedUrlCommand*)command
+    {
+        [self.commandDelegate runInBackground:^{
 
-- (void)saveImageDataToLibrary:(CDVInvokedUrlCommand*)command
-{
-    self.callbackId = command.callbackId;
-	NSData* imageData = [NSData dataFromBase64String:[command.arguments objectAtIndex:0]];
+            //NSData* imageData = [NSData dataFromBase64String:[command.arguments objectAtIndex:0]];
 
-	UIImage* image = [[[UIImage alloc] initWithData:imageData] autorelease];
+            CDVPluginResult* pluginResult = nil;
+            NSString* base64String = [command.arguments objectAtIndex:0];
 
-	UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
-}
+            if (base64String != nil && [base64String length] > 0) {
 
-- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
-{
-    CDVPluginResult* result = nil;
+                NSData* imageData = [[[NSData alloc] initWithBase64EncodedString:base64String options:0] autorelease];
+                UIImage* image = [[[UIImage alloc] initWithData:imageData] autorelease];
 
-    // Was there an error?
-    if (error != NULL) {
-        NSLog(@"ERROR: %@", error);
+                UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
 
-        result = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsString:error.description];
+            } else {
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
 
-		[self.webView stringByEvaluatingJavaScriptFromString:[result toErrorCallbackString: self.callbackId]];
+                [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            }
 
-    // No errors
-    } else {
-
-		result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK];
-
-        [self.webView stringByEvaluatingJavaScriptFromString:[result toSuccessCallbackString: self.callbackId]];
+        }];
     }
-}
 
-- (void)dealloc
-{
-	[callbackId release];
-    [super dealloc];
-}
+    - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+    {
+        CDVPluginResult* result = nil;
+
+        // With errors
+        if (error != NULL) {
+            NSLog(@"ERROR: %@", error);
+
+            result = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsString:error.description];
+
+    		//[self.webView stringByEvaluatingJavaScriptFromString:[result toErrorCallbackString: command.callbackId]];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+
+        // No errors
+        } else {
+
+    		result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK];
+
+            //[self.webView stringByEvaluatingJavaScriptFromString:[result toSuccessCallbackString: command.callbackId]];
+        }
+
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }
 
 @end
