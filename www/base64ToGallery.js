@@ -47,7 +47,7 @@ module.exports = function(data, options, success, fail) {
   // Prepare base64 string
   data = data.replace(/data:image\/png;base64,/, '');
 
-  return cordova.exec(ok(success), error(fail), SERVICE, ACTION, [data, prefix, media_scanner]);
+  return cordova.exec(ok(success), error(fail), SERVICE, ACTION, [data, prefix, mediaScanner]);
 };
 
 /**
