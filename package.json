@@ -58,8 +58,5 @@
   "devDependencies": {
     "eslint": "1.10.3",
     "nodemsg": "1.0.0"
-  },
-  "dependencies": {
-    "object.assign": "4.0.3"
   }
 }

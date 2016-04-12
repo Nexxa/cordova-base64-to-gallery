@@ -9,7 +9,7 @@
  * @license MIT
  */
 
-var assign = require('object.assign').getPolyfill();
+var assign = require('../lib/object.assign-polyfill');
 
 // Consts
 var SERVICE  = 'Base64ToGallery';
