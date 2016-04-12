@@ -12,13 +12,6 @@
 // Consts
 var SERVICE  = 'Base64ToGallery';
 var ACTION   = 'saveImageDataToLibrary';
-var DEFAULTS = { prefix: '', media_scanner: true };
-
-/**
- * @property indexFromArgs - Partially applied "indexFrom" method with ARGS constant.
- * @private
- */
-var indexFromArgs = indexFrom.bind(null, ARGS);
 
 /**
  * Saves base64 data as image.
@@ -43,7 +36,7 @@ module.exports = function(data, options, success, fail) {
     } else if(Object(options)){
       // it's an Object
       if(typeof options.prefix !== 'undefined'){
-        prefix = options.prefix
+        prefix = options.prefix;
       }
       if(typeof options.mediaScanner !== 'undefined'){
         mediaScanner = options.mediaScanner;
@@ -85,6 +78,4 @@ function error(fail) {
   }
 
   return fail;
-}
-
 }
