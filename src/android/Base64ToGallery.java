@@ -40,7 +40,7 @@ public class Base64ToGallery extends CordovaPlugin {
 
     String base64               = args.optString(0);
     String filePrefix           = args.optString(1);
-    boolean mediaScannerEnabled = args.optString(2);
+    boolean mediaScannerEnabled = args.optBoolean(2);
 
     // isEmpty() requires API level 9
     if (base64.equals(EMPTY_STR)) {
