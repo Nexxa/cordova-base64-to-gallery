@@ -23,25 +23,14 @@ var ACTION   = 'saveImageDataToLibrary';
  * @return {undefined}
  */
 module.exports = function(data, options, success, fail) {
-  var prefix = '',
+  var prefix = 'img_',
       mediaScanner = true;
-  // Handle method call with 3 or 4 parameters (options optional)
-  if (arguments.length < 4) {
-    success = arguments[1];
-    fail    = arguments[2];
-  }else{
-    if (typeof options === 'string') {
-      // it's a string
-      prefix = options;      
-    } else if(Object(options)){
-      // it's an Object
-      if(typeof options.prefix !== 'undefined'){
-        prefix = options.prefix;
-      }
-      if(typeof options.mediaScanner !== 'undefined'){
-        mediaScanner = options.mediaScanner;
-      }
-    }
+  
+  if(typeof options.prefix !== 'undefined'){
+    prefix = options.prefix;
+  }
+  if(typeof options.mediaScanner !== 'undefined'){
+    mediaScanner = options.mediaScanner;
   }
 
   // Prepare base64 string
