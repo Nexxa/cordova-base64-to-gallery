@@ -4,7 +4,7 @@
   "description": "Cordova plugin to save base64 data as a png image into the device",
   "license": "MIT",
   "scripts": {
-    "update": "node ./scripts/update_version",
+    "bump": "node ./scripts/bump_version",
     "lint": "eslint www/base64ToGallery.js",
     "test": "npm run lint",
     "prepublish": "npm test"
