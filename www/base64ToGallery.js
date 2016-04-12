@@ -14,8 +14,8 @@ var assign = require('object.assign').getPolyfill();
 // Consts
 var SERVICE  = 'Base64ToGallery';
 var ACTION   = 'saveImageDataToLibrary';
-var ARGS     = ['data', 'prefix', 'media_scanner'];
-var DEFAULTS = { prefix: '', media_scanner: true };
+var ARGS     = ['data', 'prefix', 'mediaScanner'];
+var DEFAULTS = { prefix: '', mediaScanner: true };
 
 /**
  * @property indexFromArgs - Partially applied "indexFrom" method with ARGS constant.
