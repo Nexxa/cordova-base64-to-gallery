@@ -37,7 +37,7 @@ Saved file name prefix.
 
 **Default**: "img_"
 
-##### `media_scanner`
+##### `mediaScanner`
 Android Media Scanner after file creation enabled or not.
 
 **Default**: true
@@ -51,7 +51,7 @@ function onDeviceReady() {
 
         {
             prefix: 'img_',
-            media_scanner: true
+            mediaScanner: true
         },
 
         function(msg) {
