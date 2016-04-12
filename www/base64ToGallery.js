@@ -12,6 +12,7 @@
 // Consts
 var SERVICE  = 'Base64ToGallery';
 var ACTION   = 'saveImageDataToLibrary';
+var DEFAULTS = { prefix: '', mediaScanner: true };
 
 /**
  * Saves base64 data as image.
@@ -23,13 +24,15 @@ var ACTION   = 'saveImageDataToLibrary';
  * @return {undefined}
  */
 module.exports = function(data, options, success, fail) {
-  var prefix = options.prefix === undefined ? 'img_' : options.prefix,
-      mediaScanner = options.mediaScanner === undefined ? true: options.mediaScanner;
+  var actionArgs = prepareArgs(options);
 
   // Prepare base64 string
   data = data.replace(/data:image\/png;base64,/, '');
 
-  return cordova.exec(ok(success), error(fail), SERVICE, ACTION, [data, prefix, mediaScanner]);
+  // And add it to the Service's Action arguments
+  actionArgs.unshift(data);
+
+  return cordova.exec(ok(success), error(fail), SERVICE, ACTION, actionArgs);
 };
 
 /**
@@ -60,4 +63,19 @@ function error(fail) {
   }
 
   return fail;
+}
+
+/**
+ * Prepares parameter to pass to Service's Action.<br/>
+ * @private
+ * @param  {object} opts - Options object
+ * @return {array}  Arguments array
+ */
+function prepareArgs(opts) {
+  var args = [];
+      
+  for(var index in DEFAULTS) { 
+   args.push(opts.hasOwnProperty(index)? opts[index]: DEFAULTS[index]);
+  }
+  return args;
 }
