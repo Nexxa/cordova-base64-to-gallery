@@ -21,7 +21,7 @@
       "cordova": ">=3.0.0"
     },
     {
-      "node": ">=0.10"
+      "node": ">=0.12"
     }
   ],
   "cordova": {
@@ -58,5 +58,8 @@
   "devDependencies": {
     "eslint": "1.10.3",
     "nodemsg": "1.0.0"
+  },
+  "dependencies": {
+    "object.assign": "4.0.3"
   }
 }
