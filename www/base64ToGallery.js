@@ -9,12 +9,9 @@
  * @license MIT
  */
 
-var assign = require('object.assign').getPolyfill();
-
 // Consts
 var SERVICE  = 'Base64ToGallery';
 var ACTION   = 'saveImageDataToLibrary';
-var ARGS     = ['data', 'prefix', 'media_scanner'];
 var DEFAULTS = { prefix: '', media_scanner: true };
 
 /**
@@ -33,16 +30,31 @@ var indexFromArgs = indexFrom.bind(null, ARGS);
  * @return {undefined}
  */
 module.exports = function(data, options, success, fail) {
-  var spec       = assign(DEFAULTS, options);
-  var actionArgs = prepareArgs(spec);
+  var prefix = '',
+      mediaScanner = true;
+  // Handle method call with 3 or 4 parameters (options optional)
+  if (arguments.length < 4) {
+    success = arguments[1];
+    fail    = arguments[2];
+  }else{
+    if (typeof options === 'string') {
+      // it's a string
+      prefix = options;      
+    } else if(Object(options)){
+      // it's an Object
+      if(typeof options.prefix !== 'undefined'){
+        prefix = options.prefix
+      }
+      if(typeof options.mediaScanner !== 'undefined'){
+        mediaScanner = options.mediaScanner;
+      }
+    }
+  }
 
   // Prepare base64 string
   data = data.replace(/data:image\/png;base64,/, '');
 
-  // And add it to the Service's Action arguments
-  actionArgs.unshift(data);
-
-  return cordova.exec(ok(success), error(fail), SERVICE, ACTION, actionArgs);
+  return cordova.exec(ok(success), error(fail), SERVICE, ACTION, [data, prefix, media_scanner]);
 };
 
 /**
@@ -75,41 +87,4 @@ function error(fail) {
   return fail;
 }
 
-/**
- * Gets index of item from array.
- * @private
- * @param  {array}  fromArr - Source array
- * @param  {*}      item    - Item
- * @return {number} Index of item in array
- */
-function indexFrom(fromArr, item) {
-  return fromArr.indexOf(item);
-}
-
-/**
- * Gets value of property with specified key from object.
- * @private
- * @param  {object} fromObj - Source object
- * @param  {string} key     - Property key
- * @return {*}      Property value
- */
-function valueFrom(fromObj, key) {
-  return fromObj[key];
-}
-
-/**
- * Prepares parameter to pass to Service's Action.<br/>
- * Sort options value in order to match "arguments" proto.
- * @private
- * @param  {object} opts - Options object
- * @return {array}  Arguments array
- */
-function prepareArgs(opts) {
-  var valueFromOpts = valueFrom.bind(null, opts);
-
-  return Object.keys(opts).reduce(function(acc, item) {
-    acc.splice(indexFromArgs(item), 0, valueFromOpts(item));
-
-    return acc;
-  }, []);
 }
