@@ -51,7 +51,7 @@ function onDeviceReady() {
 
         {
             prefix: 'img_',
-            media_scanner: true
+            mediaScanner: true
         },
 
         function(msg) {
