@@ -23,15 +23,8 @@ var ACTION   = 'saveImageDataToLibrary';
  * @return {undefined}
  */
 module.exports = function(data, options, success, fail) {
-  var prefix = 'img_',
-      mediaScanner = true;
-  
-  if(typeof options.prefix !== 'undefined'){
-    prefix = options.prefix;
-  }
-  if(typeof options.mediaScanner !== 'undefined'){
-    mediaScanner = options.mediaScanner;
-  }
+  var prefix = options.prefix === undefined ? 'img_' : options.prefix,
+      mediaScanner = options.mediaScanner === undefined ? 'img_' : options.mediaScanner;
 
   // Prepare base64 string
   data = data.replace(/data:image\/png;base64,/, '');
