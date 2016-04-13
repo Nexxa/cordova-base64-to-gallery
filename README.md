@@ -26,19 +26,19 @@ Call the `cordova.base64ToGallery()` method using success and error callbacks an
 Param       | Type       | Default           | Description
 ----------- | ---------- | ----------------- | ------------------
 **data**    | *string*   |                   | base64 string
-**options** | *object*   | \*see below        | options
+**options** | *object*   | \*see below       | options
 **success** | *function* | **console.log**   | success callback
 **fail**    | *function* | **console.error** | fail callback
 
 #### Available options *
 
 ##### `prefix`
-Saved file name prefix.
+Saved file name prefix. Only works in Android and WP8.
 
 **Default**: "img_"
 
 ##### `mediaScanner`
-Android Media Scanner after file creation enabled or not.
+Android Media Scanner after file creation enabled or not. Only works in Android.
 
 **Default**: true
 
