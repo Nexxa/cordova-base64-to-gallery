@@ -1,5 +1,3 @@
-/*globals cordova*/
-
 /**
  * @file base64ToGallery PhoneGap/Cordova plugin
  * @author Tommy-Carlos Williams
@@ -9,7 +7,8 @@
  * @license MIT
  */
 
-var assign = require('../lib/object.assign-polyfill');
+var exec = require('cordova/exec');
+var assign = require('./object.assign-polyfill');
 
 // Consts
 var SERVICE  = 'Base64ToGallery';
@@ -42,7 +41,7 @@ module.exports = function(data, options, success, fail) {
   // And add it to the Service's Action arguments
   actionArgs.unshift(data);
 
-  return cordova.exec(ok(success), error(fail), SERVICE, ACTION, actionArgs);
+  return exec(ok(success), error(fail), SERVICE, ACTION, actionArgs);
 };
 
 /**
