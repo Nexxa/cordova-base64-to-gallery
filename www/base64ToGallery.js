@@ -7,48 +7,52 @@
  * @license MIT
  */
 
-/*globals cordova*/
+var exec = require('cordova/exec');
+var assign = require('./object.assign-polyfill');
 
 // Consts
-// ------
-var SERVICE = 'Base64ToGallery';
-var ACTION  = 'saveImageDataToLibrary';
+var SERVICE  = 'Base64ToGallery';
+var ACTION   = 'saveImageDataToLibrary';
+var ARGS     = ['data', 'prefix', 'mediaScanner'];
+var DEFAULTS = { prefix: 'img_', mediaScanner: true };
 
-// Exports
-// -------
+/**
+ * @property indexFromArgs - Partially applied "indexFrom" method with ARGS constant.
+ * @private
+ */
+var indexFromArgs = indexFrom.bind(null, ARGS);
+
 /**
  * Saves base64 data as image.
+ * @public
  * @param  {string}   data
  * @param  {string}   [prefix]
  * @param  {function} [success]
  * @param  {function} [fail]
  * @return {undefined}
  */
-module.exports = function(data, prefix, success, fail) {
-  // Handle method call with 3 or 4 parameters (prefix optional)
-  if (arguments.length < 4) {
-    prefix  = '';
-    success = arguments[1];
-    fail    = arguments[2];
-  }
+module.exports = function(data, options, success, fail) {
+  var spec       = assign(DEFAULTS, options);
+  var actionArgs = prepareArgs(spec);
 
   // Prepare base64 string
   data = data.replace(/data:image\/png;base64,/, '');
 
-  return cordova.exec(ok(success), error(fail), SERVICE, ACTION, [data, prefix]);
+  // And add it to the Service's Action arguments
+  actionArgs.unshift(data);
+
+  return exec(ok(success), error(fail), SERVICE, ACTION, actionArgs);
 };
 
-// Private methods
-// ---------------
 /**
  * Gets success callback if it is defined and not null.
  * Otherwise returns a simple console.log.
- *
+ * @private
  * @param  {[function|undefined|null]} success
  * @return {function}
  */
 function ok(success) {
-  if (typeof success === 'undefined' || success === null) {
+  if (typeof success !== 'function') {
     return console.log;
   }
 
@@ -58,14 +62,53 @@ function ok(success) {
 /**
  * Gets fail callback if it is defined and not null.
  * Otherwise returns a simple console.error.
- *
+ * @private
  * @param  {[function|undefined|null]} fail
  * @return {function}
  */
 function error(fail) {
-  if (typeof fail === 'undefined' || fail === null) {
+  if (typeof fail !== 'function') {
     return console.error;
   }
 
   return fail;
+}
+
+/**
+ * Gets index of item from array.
+ * @private
+ * @param  {array}  fromArr - Source array
+ * @param  {*}      item    - Item
+ * @return {number} Index of item in array
+ */
+function indexFrom(fromArr, item) {
+  return fromArr.indexOf(item);
+}
+
+/**
+ * Gets value of property with specified key from object.
+ * @private
+ * @param  {object} fromObj - Source object
+ * @param  {string} key     - Property key
+ * @return {*}      Property value
+ */
+function valueFrom(fromObj, key) {
+  return fromObj[key];
+}
+
+/**
+ * Prepares parameter to pass to Service's Action.<br/>
+ * Sort options value in order to match "arguments" proto.
+ * @private
+ * @param  {object} opts - Options object
+ * @return {array}  Arguments array
+ */
+function prepareArgs(opts) {
+  var valueFromOpts = valueFrom.bind(null, opts);
+
+  return Object.keys(opts).reduce(function(acc, item) {
+    acc.splice(indexFromArgs(item), 0, valueFromOpts(item));
+
+    return acc;
+  }, []);
 }

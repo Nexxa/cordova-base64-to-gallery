@@ -30,119 +30,109 @@ import android.util.Log;
  */
 public class Base64ToGallery extends CordovaPlugin {
 
-	// Consts
-	public static final String ACTION              = "saveImageDataToLibrary";
-	public static final String DEFAULT_FILE_PREFIX = "img_";
-	public static final String EMPTY_STR           = "";
+  // Consts
+  public static final String EMPTY_STR = "";
 
-	@Override
-	public boolean execute(String action, JSONArray args,
-			CallbackContext callbackContext) throws JSONException {
+  @Override
+  public boolean execute(String action, JSONArray args,
+      CallbackContext callbackContext) throws JSONException {
 
-		if (action.equals(ACTION)) {
+    String base64               = args.optString(0);
+    String filePrefix           = args.optString(1);
+    boolean mediaScannerEnabled = args.optBoolean(2);
 
-			String base64     = args.optString(0);
-			String filePrefix = args.optString(1);
+    // isEmpty() requires API level 9
+    if (base64.equals(EMPTY_STR)) {
+      callbackContext.error("Missing base64 string");
+    }
 
-			// isEmpty() requires API level 9
-			if (base64.equals(EMPTY_STR)) {
-				callbackContext.error("Missing base64 string");
-			}
+    // Create the bitmap from the base64 string
+    byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
+    Bitmap bmp           = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-			if (filePrefix.equals(EMPTY_STR)) {
-				filePrefix = DEFAULT_FILE_PREFIX;
-			}
+    if (bmp == null) {
+      callbackContext.error("The image could not be decoded");
 
-      // Create the bitmap from the base64 string
-			byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
-			Bitmap bmp           = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+    } else {
 
-			if (bmp == null) {
-				callbackContext.error("The image could not be decoded");
+      // Save the image
+      File imageFile = savePhoto(bmp, filePrefix);
 
-			} else {
+      if (imageFile == null) {
+        callbackContext.error("Error while saving image");
+      }
 
-				// Save the image
-				File imageFile = savePhoto(bmp, filePrefix);
+      // Update image gallery
+      if (mediaScannerEnabled) {
+        scanPhoto(imageFile);
+      }
 
-				if (imageFile == null) {
-					callbackContext.error("Error while saving image");
-				}
+      callbackContext.success(imageFile.toString());
+    }
 
-				// Update image gallery
-				scanPhoto(imageFile);
+    return true;
+  }
 
-				callbackContext.success(imageFile.toString());
-			}
+  private File savePhoto(Bitmap bmp, String prefix) {
+    File retVal = null;
 
-			return true;
+    try {
+      String deviceVersion = Build.VERSION.RELEASE;
+      Calendar c           = Calendar.getInstance();
+      String date          = EMPTY_STR
+                              + c.get(Calendar.YEAR)
+                              + c.get(Calendar.MONTH)
+                              + c.get(Calendar.DAY_OF_MONTH)
+                              + c.get(Calendar.HOUR_OF_DAY)
+                              + c.get(Calendar.MINUTE)
+                              + c.get(Calendar.SECOND);
 
-		} else {
+      int check = deviceVersion.compareTo("2.3.3");
 
-			return false;
-		}
-	}
+      File folder;
 
-	private File savePhoto(Bitmap bmp, String prefix) {
-		File retVal = null;
+      /*
+       * File path = Environment.getExternalStoragePublicDirectory(
+       * Environment.DIRECTORY_PICTURES ); //this throws error in Android
+       * 2.2
+       */
+      if (check >= 1) {
+        folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-		try {
-			String deviceVersion = Build.VERSION.RELEASE;
-			Calendar c           = Calendar.getInstance();
-			String date          = EMPTY_STR
-															+ c.get(Calendar.YEAR)
-															+ c.get(Calendar.MONTH)
-															+ c.get(Calendar.DAY_OF_MONTH)
-															+ c.get(Calendar.HOUR_OF_DAY)
-															+ c.get(Calendar.MINUTE)
-															+ c.get(Calendar.SECOND);
+        if (!folder.exists()) {
+          folder.mkdirs();
+        }
 
-			int check = deviceVersion.compareTo("2.3.3");
+      } else {
+        folder = Environment.getExternalStorageDirectory();
+      }
 
-			File folder;
+      File imageFile = new File(folder, prefix + date + ".png");
 
-			/*
-			 * File path = Environment.getExternalStoragePublicDirectory(
-			 * Environment.DIRECTORY_PICTURES ); //this throws error in Android
-			 * 2.2
-			 */
-			if (check >= 1) {
-				folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+      FileOutputStream out = new FileOutputStream(imageFile);
+      bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+      out.flush();
+      out.close();
 
-				if (!folder.exists()) {
-					folder.mkdirs();
-				}
+      retVal = imageFile;
 
-			} else {
-				folder = Environment.getExternalStorageDirectory();
-			}
+    } catch (Exception e) {
+      Log.e("Base64ToGallery", "An exception occured while saving image: " + e.toString());
+    }
 
-			File imageFile = new File(folder, prefix + date + ".png");
+    return retVal;
+  }
 
-			FileOutputStream out = new FileOutputStream(imageFile);
-			bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
-			out.flush();
-			out.close();
-
-			retVal = imageFile;
-
-		} catch (Exception e) {
-			Log.e("Base64ToGallery", "An exception occured while saving image: " + e.toString());
-		}
-
-		return retVal;
-	}
-
-	/**
-	 * Invoke the system's media scanner to add your photo to the Media Provider's database,
-	 * making it available in the Android Gallery application and to other apps.
-	 */
-	private void scanPhoto(File imageFile) {
-		Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+  /**
+   * Invoke the system's media scanner to add your photo to the Media Provider's database,
+   * making it available in the Android Gallery application and to other apps.
+   */
+  private void scanPhoto(File imageFile) {
+    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
     Uri contentUri         = Uri.fromFile(imageFile);
 
     mediaScanIntent.setData(contentUri);
 
-		cordova.getActivity().sendBroadcast(mediaScanIntent);
-	}
+    cordova.getActivity().sendBroadcast(mediaScanIntent);
+  }
 }

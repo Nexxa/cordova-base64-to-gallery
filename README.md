@@ -17,19 +17,30 @@ So, cordova-base64-to-gallery plugin **from version 3.0.0** has changed the iOS 
 
 If you need to support cordova-ios < 3.8.0 please refer to [cordova-base64-to-gallery@2.0.2](https://github.com/Nexxa/cordova-base64-to-gallery/tree/2.0.2). There is also an "**old**" branch that might have some updates in the future (Android/WP8 fixes or something like that).
 
-
 ## Usage
-Call the `cordova.base64ToGallery()` method using success and error callbacks and the id attribute or the element object of the canvas to save (`prefix` is optional):
+Call the `cordova.base64ToGallery()` method using success and error callbacks and the passing the image's base64 string (`options` is optional):
 
 ### Methods
-#### `cordova.base64ToGallery(data, [prefix, success, fail])`
+#### `cordova.base64ToGallery(data, [options, success, fail])`
 
 Param       | Type       | Default           | Description
 ----------- | ---------- | ----------------- | ------------------
 **data**    | *string*   |                   | base64 string
-**prefix**  | *string*   | **img_**          | file's name prefix
+**options** | *object*   | \*see below       | options
 **success** | *function* | **console.log**   | success callback
 **fail**    | *function* | **console.error** | fail callback
+
+#### Available options *
+
+##### `prefix`
+Saved file name prefix. Only works in Android and WP8.
+
+**Default**: "img_"
+
+##### `mediaScanner`
+Android Media Scanner after file creation enabled or not. Only works in Android.
+
+**Default**: true
 
 ### Example
 
@@ -38,13 +49,16 @@ function onDeviceReady() {
     cordova.base64ToGallery(
         base64Data,
 
-        'img_',
+        {
+            prefix: 'img_',
+            mediaScanner: true
+        },
 
-        function(msg){
+        function(msg) {
             console.log(msg);
         },
 
-        function(err){
+        function(err) {
             console.error(err);
         }
     );

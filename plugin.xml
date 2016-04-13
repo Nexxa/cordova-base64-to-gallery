@@ -15,6 +15,9 @@
 
   <license>MIT</license>
 
+  <js-module name="object.assign-polyfill" src="www/object.assign-polyfill.js">
+  </js-module>
+
   <js-module name="base64ToGallery" src="www/base64ToGallery.js">
     <clobbers target="cordova.base64ToGallery"/>
   </js-module>
