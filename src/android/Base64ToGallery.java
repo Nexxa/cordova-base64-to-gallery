@@ -31,8 +31,7 @@ import android.util.Log;
 public class Base64ToGallery extends CordovaPlugin {
 
   // Consts
-  public static final String DEFAULT_FILE_PREFIX = "img_";
-  public static final String EMPTY_STR           = "";
+  public static final String EMPTY_STR = "";
 
   @Override
   public boolean execute(String action, JSONArray args,
@@ -45,10 +44,6 @@ public class Base64ToGallery extends CordovaPlugin {
     // isEmpty() requires API level 9
     if (base64.equals(EMPTY_STR)) {
       callbackContext.error("Missing base64 string");
-    }
-
-    if (filePrefix.equals(EMPTY_STR)) {
-      filePrefix = DEFAULT_FILE_PREFIX;
     }
 
     // Create the bitmap from the base64 string

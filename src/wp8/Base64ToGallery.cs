@@ -22,11 +22,6 @@ public class Base64ToGallery : BaseCommand
             string prefix     = options[1];
             byte[] imageBytes = Convert.FromBase64String(imageData);
 
-            if (String.IsNullOrEmpty(prefix))
-            {
-                prefix = "img_";
-            }
-
             using (var imageStream = new MemoryStream(imageBytes))
             {
                 imageStream.Seek(0, SeekOrigin.Begin);
