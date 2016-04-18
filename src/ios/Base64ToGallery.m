@@ -1,3 +1,4 @@
+
 //
 //  Base64ToGallery.m
 //  Base64ToGallery PhoneGap/Cordova plugin
@@ -19,40 +20,70 @@
         [self.commandDelegate runInBackground:^{
             self.callbackId = command.callbackId;
             self.result = nil;
+            self.imagePath = nil;
 
-            NSString* base64String = [command.arguments objectAtIndex:0];
+            NSString *base64String = [command.arguments objectAtIndex:0];
+            NSString *prefix = [command.arguments objectAtIndex:1];
+            bool cameraRoll = [command.arguments objectAtIndex:2];
 
             if (base64String != nil && [base64String length] > 0) {
 
-                NSData* imageData = [[[NSData alloc] initWithBase64EncodedString:base64String options:0] autorelease];
-                UIImage* image = [[[UIImage alloc] initWithData:imageData] autorelease];
+                NSData *imageData = [[[NSData alloc] initWithBase64EncodedString:base64String options:0] autorelease];
+                UIImage *image = [[[UIImage alloc] initWithData:imageData] autorelease];
 
-                UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+                // converts the UIImage to NSData
+                NSData *pngImageData = UIImagePNGRepresentation(image);
+
+                // image extension
+                NSString *imageExtension = @".png";
+
+                // get Timestamp
+                double currentTime = CACurrentMediaTime();
+
+                // set fileName
+                NSString *timeString = [NSString stringWithFormat:@"%f", currentTime];
+                timeString = [str stringByReplacingOccurrencesOfString:@"." withString:@""];
+                NSString *fileName = [prefix stringByAppendingString: timeString];
+                fileName = [fileName stringByAppendingString: imageExtension];
+
+                NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+                self.imagePath = [docPath stringByAppendingString: filename];
+
+                // writeToFile
+                bool success = [pngImageData writeToFile:self.imagePath atomically:NO];
+
+                if(success){
+                    // write to documents folder was successfull
+                    if(cameraRoll){
+                        // add the image to camera roll
+                        UIImage * savedImage = [UIImage imageWithData:[NSData dataWithContentsOfFile:[[NSURL URLWithString:self.imagePath] path]]];
+                        UIImageWriteToSavedPhotosAlbum(savedImage, self, @selector(thisImage:wasSavedToPhotoAlbumWithError:contextInfo:), nil);
+                    }else{
+                        CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: self.imagePath];
+                        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+                    }
+
+                }else{
+                    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"error writing image to documents folder"];
+                    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+                }
 
             } else {
-                self.result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-
-                [self.commandDelegate sendPluginResult:self.result callbackId:self.callbackId];
+                CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"no valid base64 image data was passed"];
+                [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
             }
 
         }];
     }
 
-    - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
-    {
-        // With errors
-        if (error != NULL) {
-            NSLog(@"ERROR: %@", error);
-
-            self.result = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsString:error.description];
-
-        // No errors
+    - (void)thisImage:(UIImage *)image wasSavedToPhotoAlbumWithError:(NSError *)error contextInfo:(void*)ctxInfo {
+        if (error) {
+            CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.localizedDescription];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.command.callbackId];
         } else {
-
-    		self.result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK];
+            CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.imagePath];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.command.callbackId];
         }
-
-        [self.commandDelegate sendPluginResult:self.result callbackId:self.callbackId];
     }
 
 @end
