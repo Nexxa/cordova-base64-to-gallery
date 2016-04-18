@@ -48,21 +48,22 @@
 
                 NSString *libPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)[0];
                 NSString *libPathNoSync = [libPath stringByAppendingPathComponent:@"NoCloud"];
+                NSFileManager *fileManager = [NSFileManager defaultManager];//create instance of NSFileManager
                 
                 // Create the directory if necessary.
-                [[NSFileManager defaultManager] createDirectoryAtPath:libPathNoSync withIntermediateDirectories:YES attributes:nil error:nil];
+                [fileManager createDirectoryAtPath:libPathNoSync withIntermediateDirectories:YES attributes:nil error:nil];
                 
-                self.imagePath = [libPathNoSync stringByAppendingString:@"/"];
-                self.imagePath = [self.imagePath stringByAppendingString: fileName];
+                self.imagePath = [libPathNoSync stringByAppendingPathComponent:fileName];
 
                 // writeToFile
-                NSError * error = nil;
+                //NSError * error = nil;
                 //bool success = 
-                [pngImageData writeToFile:self.imagePath options:NSDataWritingAtomic error:&error];
-                if (error) {
-                    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.localizedDescription];
-                    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
-                }
+                [fileManager createFileAtPath:self.imagePath contents:pngImageData attributes:nil];
+                //[pngImageData writeToFile:self.imagePath options:NSDataWritingAtomic error:&error];
+                //if (error) {
+                //    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.localizedDescription];
+                //    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+                //}
                 //if(success){
                     // write to documents folder was successfull
                     if(cameraRoll){
