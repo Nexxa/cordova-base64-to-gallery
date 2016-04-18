@@ -52,13 +52,14 @@
 
                 // writeToFile
                 NSError *error = nil;
-                bool success = [pngImageData writeToFile:self.imagePath atomically:YES error:&error];
+                //bool success = 
+                [pngImageData writeToFile:self.imagePath atomically:YES error:&error];
                 
                 if (error) {
                     CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.localizedDescription];
                     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
                 }
-                if(success){
+                //if(success){
                     // write to documents folder was successfull
                     if(cameraRoll){
                         // add the image to camera roll
@@ -69,11 +70,11 @@
                         [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
                     }
 
-                }else{
-                    self.imagePath = [self.imagePath stringByAppendingString: @" - error writing image to documents folder"];
-                    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:self.imagePath];
-                    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
-                }
+                //}else{
+                //    self.imagePath = [self.imagePath stringByAppendingString: @" - error writing image to documents folder"];
+                //    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:self.imagePath];
+                //    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+                //}
 
             } else {
                 CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"no valid base64 image data was passed"];
