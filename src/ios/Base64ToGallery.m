@@ -51,8 +51,13 @@
                 self.imagePath = [self.imagePath stringByAppendingString: fileName];
 
                 // writeToFile
-                bool success = [pngImageData writeToFile:self.imagePath atomically:YES];
-
+                NSError *error = nil;
+                bool success = [pngImageData writeToFile:self.imagePath atomically:YES error:&error];
+                
+                if (error) {
+                    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.localizedDescription];
+                    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+                }
                 if(success){
                     // write to documents folder was successfull
                     if(cameraRoll){
