@@ -42,12 +42,12 @@
 
                 // set fileName
                 NSString *timeString = [NSString stringWithFormat:@"%f", currentTime];
-                timeString = [str stringByReplacingOccurrencesOfString:@"." withString:@""];
+                timeString = [timeString stringByReplacingOccurrencesOfString:@"." withString:@""];
                 NSString *fileName = [prefix stringByAppendingString: timeString];
                 fileName = [fileName stringByAppendingString: imageExtension];
 
                 NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-                self.imagePath = [docPath stringByAppendingString: filename];
+                self.imagePath = [docPath stringByAppendingString: fileName];
 
                 // writeToFile
                 bool success = [pngImageData writeToFile:self.imagePath atomically:NO];
@@ -79,10 +79,10 @@
     - (void)thisImage:(UIImage *)image wasSavedToPhotoAlbumWithError:(NSError *)error contextInfo:(void*)ctxInfo {
         if (error) {
             CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.localizedDescription];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.command.callbackId];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
         } else {
             CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.imagePath];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.command.callbackId];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
         }
     }
 
