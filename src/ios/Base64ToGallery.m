@@ -52,9 +52,6 @@
                 // Create the directories if necessary.
                 [[NSFileManager defaultManager] createDirectoryAtPath:libPathSync withIntermediateDirectories:YES attributes:nil error:nil];
                 [[NSFileManager defaultManager] createDirectoryAtPath:libPathNoSync withIntermediateDirectories:YES attributes:nil error:nil];
-                // Mark NoSync as non-iCloud.
-                [[NSURL fileURLWithPath:libPathNoSync] setResourceValue: [NSNumber numberWithBool: YES]
-                                                     forKey: NSURLIsExcludedFromBackupKey error:nil];
                 
                 self.imagePath = [libPathNoSync stringByAppendingPathComponent: fileName];
 
