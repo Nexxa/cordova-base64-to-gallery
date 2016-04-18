@@ -49,8 +49,7 @@
                 NSString* libPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)[0];
                 NSString* libPathNoSync = [libPath stringByAppendingPathComponent:@"NoCloud"];
                 
-                // Create the directories if necessary.
-                [[NSFileManager defaultManager] createDirectoryAtPath:libPathSync withIntermediateDirectories:YES attributes:nil error:nil];
+                // Create the directory if necessary.
                 [[NSFileManager defaultManager] createDirectoryAtPath:libPathNoSync withIntermediateDirectories:YES attributes:nil error:nil];
                 
                 self.imagePath = [libPathNoSync stringByAppendingString:@"/"];
