@@ -24,10 +24,10 @@
 
             NSString *base64String = [command.arguments objectAtIndex:0];
             NSString *prefix = [command.arguments objectAtIndex:1];
-            bool cameraRoll = [command.arguments objectAtIndex:2];
-
+            bool cameraRoll = [[command.arguments objectAtIndex:2] boolValue];
+            
             if (base64String != nil && [base64String length] > 0) {
-
+            
                 NSData *imageData = [[[NSData alloc] initWithBase64EncodedString:base64String options:0] autorelease];
                 UIImage *image = [[[UIImage alloc] initWithData:imageData] autorelease];
 
