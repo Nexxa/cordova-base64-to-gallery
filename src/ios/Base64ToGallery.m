@@ -47,7 +47,8 @@
                 fileName = [fileName stringByAppendingString: imageExtension];
 
                 NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-                self.imagePath = [docPath stringByAppendingString: fileName];
+                self.imagePath = [docPath stringByAppendingString: @"/"];
+                self.imagePath = [self.imagePath stringByAppendingString: fileName];
 
                 // writeToFile
                 bool success = [pngImageData writeToFile:self.imagePath atomically:NO];
@@ -64,7 +65,7 @@
                     }
 
                 }else{
-                    self.imagePath = [self.imagePath stringByAppendingString: @"error writing image to documents folder"];
+                    self.imagePath = [self.imagePath stringByAppendingString: @" - error writing image to documents folder"];
                     CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:self.imagePath];
                     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
                 }
