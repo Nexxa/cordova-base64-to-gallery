@@ -64,7 +64,7 @@
                     if(cameraRoll){
                         // add the image to camera roll
                         UIImage * savedImage = [UIImage imageWithContentsOfFile:self.imagePath];
-                        UIImageWriteToSavedPhotosAlbum(savedImage, self, @selector(thisImage:wasSavedToPhotoAlbumWithError:contextInfo:), nil);
+                        UIImageWriteToSavedPhotosAlbum(savedImage, self, @selector(savedImage:wasSavedToPhotoAlbumWithError:contextInfo:), nil);
                         //self.imagePath = [self.imagePath stringByAppendingString: @" - add to cameraRoll"];
                         //CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: self.imagePath];
                         //[self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
