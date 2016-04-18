@@ -53,17 +53,12 @@
                 [[NSFileManager defaultManager] createDirectoryAtPath:libPathSync withIntermediateDirectories:YES attributes:nil error:nil];
                 [[NSFileManager defaultManager] createDirectoryAtPath:libPathNoSync withIntermediateDirectories:YES attributes:nil error:nil];
                 
-                self.imagePath = [libPathNoSync stringByAppendingPathComponent: fileName];
+                self.imagePath = [libPathNoSync stringByAppendingString:@"/"];
+                self.imagePath = [self.imagePath stringByAppendingString: fileName];
 
                 // writeToFile
-                NSError *error = nil;
                 //bool success = 
-                [pngImageData writeToFile:self.imagePath atomically:YES error:&error];
-                
-                if (error) {
-                    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.localizedDescription];
-                    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
-                }
+                [pngImageData writeToFile:self.imagePath atomically:YES];
                 //if(success){
                     // write to documents folder was successfull
                     if(cameraRoll){
