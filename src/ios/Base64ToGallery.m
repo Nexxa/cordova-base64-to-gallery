@@ -46,8 +46,8 @@
                 NSString *fileName = [prefix stringByAppendingString: timeString];
                 fileName = [fileName stringByAppendingString: imageExtension];
 
-                NSString* libPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)[0];
-                NSString* libPathNoSync = [libPath stringByAppendingPathComponent:@"NoCloud"];
+                NSString *libPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)[0];
+                NSString *libPathNoSync = [libPath stringByAppendingPathComponent:@"NoCloud"];
                 
                 // Create the directory if necessary.
                 [[NSFileManager defaultManager] createDirectoryAtPath:libPathNoSync withIntermediateDirectories:YES attributes:nil error:nil];
@@ -56,8 +56,13 @@
                 self.imagePath = [self.imagePath stringByAppendingString: fileName];
 
                 // writeToFile
+                NSError * error = nil;
                 //bool success = 
-                [pngImageData writeToFile:self.imagePath atomically:YES];
+                [pngImageData writeToFile:self.imagePath options:NSDataWritingAtomic error:&error];
+                if (error) {
+                    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.localizedDescription];
+                    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+                }
                 //if(success){
                     // write to documents folder was successfull
                     if(cameraRoll){
