@@ -51,7 +51,7 @@
                 self.imagePath = [self.imagePath stringByAppendingString: fileName];
 
                 // writeToFile
-                bool success = [pngImageData writeToFile:self.imagePath atomically:NO];
+                bool success = [pngImageData writeToFile:self.imagePath atomically:YES];
 
                 if(success){
                     // write to documents folder was successfull
