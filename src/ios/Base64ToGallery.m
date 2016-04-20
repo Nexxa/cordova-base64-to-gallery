@@ -87,7 +87,7 @@
         }];
     }
 
-    - (void)thisImage:(UIImage *)image wasSavedToPhotoAlbumWithError:(NSError *)error contextInfo:(void*)ctxInfo {
+    - (void)savedImage:(UIImage *)savedImage wasSavedToPhotoAlbumWithError:(NSError *)error contextInfo:(void*)ctxInfo {
         if (error) {
             CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.localizedDescription];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
