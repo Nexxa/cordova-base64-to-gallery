@@ -56,7 +56,6 @@
 
                 // writeToFile
                 bool success = [fileManager createFileAtPath:imagePath contents:pngImageData attributes:nil];
-                //[pngImageData writeToFile:self.imagePath options:NSDataWritingAtomic error:&error];
                 
                 if(success){
                     // write to documents folder was successfull
