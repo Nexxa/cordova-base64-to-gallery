@@ -69,8 +69,8 @@
                     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
 
                 }else{
-                    self.imagePath = [self.imagePath stringByAppendingString: @" - error writing image to documents folder"];
-                    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:self.imagePath];
+                    imagePath = [imagePath stringByAppendingString: @" - error writing image to documents folder"];
+                    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:imagePath];
                     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
                 }
 
