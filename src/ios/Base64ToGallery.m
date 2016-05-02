@@ -20,7 +20,6 @@
         [self.commandDelegate runInBackground:^{
             self.callbackId = command.callbackId;
             self.result = nil;
-            self.imagePath = nil;
 
             NSString *base64String = [command.arguments objectAtIndex:0];
             NSString *prefix = [command.arguments objectAtIndex:1];
@@ -53,22 +52,21 @@
                 // Create the directory if necessary.
                 [fileManager createDirectoryAtPath:libPathNoSync withIntermediateDirectories:YES attributes:nil error:nil];
                 
-                self.imagePath = [libPathNoSync stringByAppendingPathComponent:fileName];
+                NSString *imagePath = [libPathNoSync stringByAppendingPathComponent:fileName];
 
                 // writeToFile
-                bool success = [fileManager createFileAtPath:self.imagePath contents:pngImageData attributes:nil];
+                bool success = [fileManager createFileAtPath:imagePath contents:pngImageData attributes:nil];
                 //[pngImageData writeToFile:self.imagePath options:NSDataWritingAtomic error:&error];
                 
                 if(success){
                     // write to documents folder was successfull
                     if(cameraRoll){
                         // add the image to camera roll
-                        UIImage * savedImage = [UIImage imageWithContentsOfFile:self.imagePath];
-                        //UIImageWriteToSavedPhotosAlbum(savedImage, self, @selector(savedImage:wasSavedToPhotoAlbumWithError:contextInfo:), nil);
+                        UIImage * savedImage = [UIImage imageWithContentsOfFile:imagePath];
                         UIImageWriteToSavedPhotosAlbum(savedImage, nil, nil, nil);
                     }
                     
-                    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: self.imagePath];
+                    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: imagePath];
                     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
 
                 }else{
@@ -83,16 +81,6 @@
             }
 
         }];
-    }
-
-    - (void)savedImage:(UIImage *)savedImage wasSavedToPhotoAlbumWithError:(NSError *)error contextInfo:(void*)contextInfo {
-        if (error) {
-            CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.localizedDescription];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
-        } else {
-            CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:self.imagePath];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
-        }
     }
 
 @end
