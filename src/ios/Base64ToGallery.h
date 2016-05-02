@@ -15,7 +15,6 @@
 
   @property (nonatomic, copy) NSString* callbackId;
   @property (nonatomic, assign) CDVPluginResult* result;
-  @property (nonatomic, assign) NSString* imagePath;
 
 	- (void)saveImageDataToLibrary:(CDVInvokedUrlCommand*)command;
 
