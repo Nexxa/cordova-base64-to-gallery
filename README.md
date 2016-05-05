@@ -39,6 +39,7 @@ Saved file name prefix. Only works in Android and WP8.
 
 ##### `mediaScanner`
 On Android runs Media Scanner after file creation.
+
 On iOS if true the file will be added to camera roll, otherwise will be saved to a library folder.
 
 **Default**: true
