@@ -33,7 +33,7 @@ Param       | Type       | Default           | Description
 #### Available options *
 
 ##### `prefix`
-Saved file name prefix. Only works in Android and WP8.
+Saved file name prefix.
 
 **Default**: "img_"
 
