@@ -18,17 +18,17 @@ So, cordova-base64-to-gallery plugin **from version 3.0.0** has changed the iOS 
 If you need to support cordova-ios < 3.8.0 please refer to [cordova-base64-to-gallery@2.0.2](https://github.com/Nexxa/cordova-base64-to-gallery/tree/2.0.2). There is also an "**old**" branch that might have some updates in the future (Android/WP8 fixes or something like that).
 
 ## Usage
-Call the `cordova.base64ToGallery()` method using success and error callbacks and the passing the image's base64 string (`options` is optional):
+Call the `cordova.base64ToGallery()` method with image's base64 string, success and error callbacks (`options` is optional):
 
 ### Methods
 #### `cordova.base64ToGallery(data, [options, success, fail])`
 
 Param       | Type       | Default           | Description
------------ | ---------- | ----------------- | ------------------
+----------- | ---------- | ----------------- | -----------------------------------------
 **data**    | *string*   |                   | base64 string
 **options** | *object*   | \*see below       | options
-**success** | *function* | **console.log**   | success callback
-**fail**    | *function* | **console.error** | fail callback
+**success** | *function* | **console.log**   | success callback (file path as parameter)
+**fail**    | *function* | **console.error** | fail callback (error as parameter)
 
 #### Available options *
 
@@ -38,7 +38,8 @@ Saved file name prefix. Only works in Android and WP8.
 **Default**: "img_"
 
 ##### `mediaScanner`
-Android Media Scanner after file creation enabled or not. Only works in Android.
+On Android runs Media Scanner after file creation.
+On iOS if true the file will be added to camera roll, otherwise will be saved to a library folder.
 
 **Default**: true
 
@@ -54,8 +55,8 @@ function onDeviceReady() {
             mediaScanner: true
         },
 
-        function(msg) {
-            console.log(msg);
+        function(path) {
+            console.log(path);
         },
 
         function(err) {
@@ -69,3 +70,4 @@ function onDeviceReady() {
 - [Tommy-Carlos Williams](http://github.com/devgeeks)
 - [Simba Zhang](http://github.com/solderzzc)
 - [StefanoMagrassi](http://github.com/StefanoMagrassi)
+- [Bastian Meier](https://github.com/bastian-meier)
