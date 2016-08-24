@@ -32,8 +32,8 @@ module.exports = function(data, prefix, success, fail) {
     fail    = arguments[2];
   }
 
-  // Prepare base64 string
-  data = data.replace(/data:image\/png;base64,/, '');
+  // Prepare base64 string 
+  data = data.replace(/^data:image\/(jpeg|png|jpg|bmp|gif);base64,/, "");
 
   return cordova.exec(ok(success), error(fail), SERVICE, ACTION, [data, prefix]);
 };
