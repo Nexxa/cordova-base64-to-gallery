@@ -62,12 +62,9 @@
                     if(cameraRoll){
                         // add the image to camera roll
                         UIImage * savedImage = [UIImage imageWithContentsOfFile:imagePath];
-                        UIImageWriteToSavedPhotosAlbum(savedImage, nil, nil, nil);
+                        UIImageWriteToSavedPhotosAlbum(savedImage, self, @selector(thisImage:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
                     }
                     
-                    CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: imagePath];
-                    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
-
                 }else{
                     imagePath = [imagePath stringByAppendingString: @" - error writing image to documents folder"];
                     CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:imagePath];
@@ -81,5 +78,15 @@
 
         }];
     }
+
+-(void)thisImage:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo{
+    if (error) {
+        CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error saving Image to Gallery, check Permissions"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+    } else {
+        CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: @"Image Saved to Gallery"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+    }
+}
 
 @end
