@@ -62,7 +62,13 @@
                     if(cameraRoll){
                         // add the image to camera roll
                         UIImage * savedImage = [UIImage imageWithContentsOfFile:imagePath];
-                        UIImageWriteToSavedPhotosAlbum(savedImage, self, @selector(thisImage:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+                        UIImageWriteToSavedPhotosAlbum(savedImage, self, 
+                            @selector(thisImage:hasBeenSavedInPhotoAlbumWithError:onImagePath:), 
+                            (void *) CFBridgingRetain(imagePath));
+                    } else {
+                        // send back the image path of the saved image
+                        CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:imagePath];
+                        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
                     }
                     
                 }else{
@@ -79,14 +85,19 @@
         }];
     }
 
--(void)thisImage:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo{
-    if (error) {
-        CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error saving Image to Gallery, check Permissions"];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
-    } else {
-        CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: @"Image Saved to Gallery"];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+    -(void)thisImage:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error onImagePath:(void*)bridgedImagePath{
+        if (error) {
+            CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error saving Image to Gallery, check Permissions"];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+        } else {
+            // retrieve bridged image path and release it to get the image path
+            NSString *imagePath = (NSString *) CFBridgingRelease(bridgedImagePath);
+            NSLog("Path of saved image: %@", imagePath);
+
+            // send the image path back to the js callback
+            CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:imagePath];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+        }
     }
-}
 
 @end
