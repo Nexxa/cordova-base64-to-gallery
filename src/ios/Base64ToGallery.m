@@ -92,7 +92,6 @@
         } else {
             // retrieve bridged image path and release it to get the image path
             NSString *imagePath = (NSString *) CFBridgingRelease(bridgedImagePath);
-            NSLog("Path of saved image: %@", imagePath);
 
             // send the image path back to the js callback
             CDVPluginResult * pluginResult  = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:imagePath];
