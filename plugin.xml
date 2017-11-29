@@ -33,6 +33,10 @@
       </feature>
     </config-file>
 
+    <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
+      <string>Save images into gallery</string>
+    </config-file>
+
     <header-file src="src/ios/Base64ToGallery.h"/>
   </platform>
 
