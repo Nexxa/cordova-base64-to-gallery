@@ -1,8 +1,3 @@
-# :warning: DISCONTINUED - Cordova base64ToGallery Plugin
-This plugin (based on [devgeeks/Canvas2ImagePlugin](http://github.com/devgeeks/Canvas2ImagePlugin)) allows you to save base64 data as a png image into the device (iOS Photo Library, Android Gallery or WindowsPhone 8 Photo Album).
-
-The plugin is a kind of fork of the [solderzzc/Base64ImageSaverPlugin](https://github.com/solderzzc/Base64ImageSaverPlugin) but with a cleaner history (a.k.a: no tags from Canvas2ImagePlugin repo) and a newer iOS implementation.
-
 ## Alerts
 
 ### Plugin id - [issue #1](https://github.com/Nexxa/cordova-base64-to-gallery/issues/1)

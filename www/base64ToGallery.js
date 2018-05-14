@@ -36,7 +36,7 @@ module.exports = function(data, options, success, fail) {
   var actionArgs = prepareArgs(spec);
 
   // Prepare base64 string
-  data = data.replace(/data:image\/png;base64,/, '');
+  data = data.replace(/^data:image\/(jpeg|png|jpg|bmp|gif);base64,/, "");
 
   // And add it to the Service's Action arguments
   actionArgs.unshift(data);
